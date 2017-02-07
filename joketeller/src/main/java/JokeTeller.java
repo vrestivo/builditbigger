@@ -3,7 +3,7 @@ import java.util.Random;
 
 public class JokeTeller {
 
-    public ArrayList<String> mJokeArray;
+    public ArrayList<String> mJokeArray = new ArrayList<>();
 
 
     //TODO place jokes elsewhere

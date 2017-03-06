@@ -1,4 +1,4 @@
-package com.example;
+package joketeller;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -36,5 +36,6 @@ public class JokeTeller {
         //TODO get string out of code
         return "No jokes available";
     }
+
 
 }

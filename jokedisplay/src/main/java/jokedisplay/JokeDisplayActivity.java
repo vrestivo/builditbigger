@@ -6,9 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+
 import com.example.jokedisplay.R;
 
-import apputil.GlobalConstants
+import apputil.GlobalConstants;
 
 import static apputil.GlobalConstants.INTENT_JOKE;
 

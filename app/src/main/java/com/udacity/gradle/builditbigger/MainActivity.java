@@ -6,10 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import apputil.GlobalConstants;
+import jokedisplay.JokeDisplayActivity;
 import joketeller.JokeTeller;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,8 +48,9 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(this, new JokeTeller().getJoke(),    //"derp",
         //        Toast.LENGTH_SHORT).show();
 
-        Intent jokeIntent = new Intent(this, JokeDisplayActivity);
+        Intent jokeIntent = new Intent(this, JokeDisplayActivity.class);
         jokeIntent.putExtra(GlobalConstants.INTENT_JOKE, new JokeTeller().getJoke());
+        startActivity(jokeIntent);
 
 
     }

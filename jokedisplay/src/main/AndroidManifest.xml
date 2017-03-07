@@ -2,11 +2,9 @@
     package="com.example.jokedisplay">
 
     <application
-        android:name="com.udacity.gradle.builditbigger."
         android:allowBackup="false"
         android:label="@string/app_name"
         android:supportsRtl="true">
-
     </application>
 
 </manifest>

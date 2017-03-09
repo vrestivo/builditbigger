@@ -1,16 +1,22 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Intent;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
-import apputil.GlobalConstants;
-import jokedisplay.JokeDisplayActivity;
-import joketeller.JokeTeller;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
+import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
+import java.io.IOException;
+
+import backend.myJokeApi.MyJokeApi;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
+/*    public void tellJoke(View view) {
         //Toast.makeText(this, new JokeTeller().getJoke(),    //"derp",
         //        Toast.LENGTH_SHORT).show();
 
@@ -53,7 +59,59 @@ public class MainActivity extends AppCompatActivity {
         startActivity(jokeIntent);
 
 
+    }*/
+
+
+    public void tellJoke(View view){
+        //TODO spawn off an AsyncTask
+        new GetJokeAsyncTask().execute(this);
     }
 
+
+}
+
+class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
+    //NOTE the endpoint annotation API name is capitalized by the framework
+    private static MyJokeApi myJokeApiService = null;
+    private Context context;
+
+
+
+    @Override
+    protected String doInBackground(Context... params) {
+
+        if(myJokeApiService == null){
+            MyJokeApi.Builder builder = new MyJokeApi.Builder(
+                    AndroidHttp.newCompatibleTransport(),
+                    new AndroidJsonFactory(),
+                    null
+            ).setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                        @Override
+                        public void initialize(AbstractGoogleClientRequest<?> request) throws IOException {
+                            request.setDisableGZipContent(true);
+                        }
+                    });
+
+            myJokeApiService = builder.build();
+        }
+
+        context = params[0];
+
+        try{
+            return myJokeApiService.getJoke().execute().getData();
+        }
+        catch (IOException ioe){
+            return ioe.getMessage();
+        }
+
+    }
+
+
+    @Override
+    protected void onPostExecute(String s) {
+        //super.onPostExecute(s);
+        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+    }
 
 }

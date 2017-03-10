@@ -81,10 +81,12 @@ class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
     protected String doInBackground(Context... params) {
 
         if(myJokeApiService == null){
-            MyJokeApi.Builder builder = new MyJokeApi.Builder(
-                    AndroidHttp.newCompatibleTransport(),
-                    new AndroidJsonFactory(),
-                    null
+            MyJokeApi.Builder builder = new MyJokeApi.Builder(  //Appengine service builder
+                    AndroidHttp.newCompatibleTransport(),       //abstract HTTP transport mechanism
+                    new AndroidJsonFactory(),                   //serialization mechanism for bidirectional
+                                                                // conversion between JSON and JAVA objects
+
+                    null                                        //HTTP request initializer used for URL request configuration
             ).setRootUrl("http://10.0.2.2:8080/_ah/api/")
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                         @Override
@@ -93,6 +95,7 @@ class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
                         }
                     });
 
+            //Appengine object
             myJokeApiService = builder.build();
         }
 

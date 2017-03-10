@@ -10,7 +10,7 @@ public class JokeTeller {
 
     //TODO place jokes elsewhere
     public JokeTeller(){
-        mJokeArray.add("Three nazis walked in a BAR");
+        mJokeArray.add("Three nazis walked into a BAR");
         mJokeArray.add("Q: What's a programmer's favorite hangout spot?\nA: Foo Bar");
         mJokeArray.add("Q: What do computer and air condicioners have in common?/nThey become useless when you open widows");
         mJokeArray.add("Chuck Norris writes code that optimizes itself");

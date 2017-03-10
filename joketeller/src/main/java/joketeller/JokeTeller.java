@@ -12,7 +12,7 @@ public class JokeTeller {
     public JokeTeller(){
         mJokeArray.add("Three nazis walked into a BAR");
         mJokeArray.add("Q: What's a programmer's favorite hangout spot?\nA: Foo Bar");
-        mJokeArray.add("Q: What do computer and air condicioners have in common?/nThey become useless when you open widows");
+        mJokeArray.add("Q: What do computer and air condicioners have in common?\nThey become useless when you open widows");
         mJokeArray.add("Chuck Norris writes code that optimizes itself");
         mJokeArray.add("A dev had and problem.\nHe decided to use Java.\nNow he has a ProblemFactory");
         mJokeArray.add("; - hide and seek champion sine 1958.");

@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by devbox on 3/10/17.
@@ -37,7 +39,7 @@ public class AsyncTaskTest {
         String joke = null;
 
         try {
-            joke = task.execute(mContext).get();
+            joke = task.execute(mContext).get(5000, TimeUnit.MILLISECONDS);
 
         }
         catch (InterruptedException ie){
@@ -46,8 +48,12 @@ public class AsyncTaskTest {
         catch (ExecutionException ee){
             ee.printStackTrace();
         }
+        catch (TimeoutException te){
+            te.printStackTrace();
+        }
 
         Assert.assertNotNull("returned null string", joke);
+        Assert.assertFalse("Connection Refused", joke.equals("Connection refused"));
 
         System.out.println("_got_joke: " + joke);
 

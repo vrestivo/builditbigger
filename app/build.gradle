@@ -31,6 +31,7 @@ android {
     }
 
 
+    sourceSets { free { java.srcDirs = ['src/free/java', 'src/free/java/'] } }
 }
 
 dependencies {
@@ -51,14 +52,12 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
     //COMPILE DEPENDENCIES
 
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.google.android.gms:play-services-ads:10.2.0'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
-
 
     //TESTING DEPENDENCIES
 

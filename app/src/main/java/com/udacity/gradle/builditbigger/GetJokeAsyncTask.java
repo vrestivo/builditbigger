@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,6 +14,9 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import java.io.IOException;
 
 import backend.myJokeApi.MyJokeApi;
+import jokedisplay.JokeDisplayActivity;
+
+import static apputil.GlobalConstants.INTENT_JOKE;
 
 /**
  * Created by devbox on 3/10/17.
@@ -61,9 +65,17 @@ public class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         //super.onPostExecute(s);
-        Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
         //mContext.getApplicationInfo();
-        Log.v(LOG_TAG, "BuildConfig.APPLICATION_ID");
+        Log.v(LOG_TAG, BuildConfig.FLAVOR);
+        if(BuildConfig.FLAVOR.equals("paid")){
+            //TODO lauch joke activity
+            Intent displayJokeIntent = new Intent(mContext, JokeDisplayActivity.class);
+            displayJokeIntent.putExtra(INTENT_JOKE, s);
+            mContext.startActivity(displayJokeIntent);
+        }
+        else {
+            Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

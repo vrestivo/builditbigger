@@ -31,15 +31,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Joke displaying activity -->
-        <activity android:name="jokedisplay.JokeDisplayActivity" />
-
-        <!-- TODO fix the configchnages below.  Bad practice included in the starter code -->
-        <!-- Include the AdActivity configChanges and theme. -->
-        <activity
-            android:name="com.google.android.gms.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent" />
     </application>
 
 </manifest>

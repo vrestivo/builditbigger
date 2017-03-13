@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -19,8 +20,8 @@ import backend.myJokeApi.MyJokeApi;
 public class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
     //NOTE the endpoint annotation API name is capitalized by the framework
     private static MyJokeApi myJokeApiService = null;
-    private Context context;
-
+    private Context mContext;
+    private final String LOG_TAG = "GetJokeAsyncTask";
 
 
     @Override
@@ -45,7 +46,7 @@ public class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
             myJokeApiService = builder.build();
         }
 
-        context = params[0];
+        mContext = params[0];
 
         try{
             return myJokeApiService.getJoke().execute().getData();
@@ -60,7 +61,9 @@ public class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         //super.onPostExecute(s);
-        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+        //mContext.getApplicationInfo();
+        Log.v(LOG_TAG, "BuildConfig.APPLICATION_ID");
     }
 
 }

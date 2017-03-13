@@ -64,8 +64,6 @@ public class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        //super.onPostExecute(s);
-        //mContext.getApplicationInfo();
         Log.v(LOG_TAG, BuildConfig.FLAVOR);
         if(BuildConfig.FLAVOR.equals("paid")){
             //TODO lauch joke activity

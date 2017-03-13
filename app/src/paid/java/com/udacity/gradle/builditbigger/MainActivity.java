@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void tellJoke(View view){
-        //TODO spawn off an AsyncTask
         try {
             new GetJokeAsyncTask().execute(this).get(TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
@@ -66,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
-            //TODO notify user about the timeout
             e.printStackTrace();
+            //TODO Notify user that could not get the joke
+
         }
 
     }

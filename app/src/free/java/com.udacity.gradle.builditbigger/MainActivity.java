@@ -6,8 +6,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 
 public class MainActivity extends AppCompatActivity {
+    private final long TIMEOUT = 5000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +57,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void tellJoke(View view){
-        //TODO spawn off an AsyncTask
-        new GetJokeAsyncTask().execute(this);
+
+        try {
+            new GetJokeAsyncTask().execute(this).get(TIMEOUT, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            //TODO Notify user that could not get the joke
+        }
     }
 
 

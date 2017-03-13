@@ -12,6 +12,7 @@ import android.view.View;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        MobileAds.initialize(this, getString(R.string.banner_ad_unit_id));
+
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
 
@@ -45,10 +49,20 @@ public class MainActivity extends AppCompatActivity {
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                super.onAdClosed();
-                //TODO request new add
+                requestNewInterstitial();
+                try {
+                    new GetJokeAsyncTask().execute(getApplicationContext()).get(TIMEOUT, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                }
             }
         });
+
+        requestNewInterstitial();
 
     }
 
@@ -77,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void tellJoke(View view) {
+        requestNewInterstitial();
 
         try {
             if (mInterstitialAd.isLoaded()) {
@@ -90,13 +105,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (TimeoutException e) {
             e.printStackTrace();
-            //TODO Notify user that could not get the joke
         }
     }
 
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("MY_EMULATOR_DEVICE")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
 
         mInterstitialAd.loadAd(adRequest);

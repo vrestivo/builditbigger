@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -31,7 +30,7 @@ public class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
     @Override
     protected String doInBackground(Context... params) {
 
-        if(myJokeApiService == null){
+        if (myJokeApiService == null) {
             MyJokeApi.Builder builder = new MyJokeApi.Builder(  //Appengine service builder
                     AndroidHttp.newCompatibleTransport(),       //abstract HTTP transport mechanism
                     new AndroidJsonFactory(),                   //serialization mechanism for bidirectional
@@ -52,10 +51,9 @@ public class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
 
         mContext = params[0];
 
-        try{
+        try {
             return myJokeApiService.getJoke().execute().getData();
-        }
-        catch (IOException ioe){
+        } catch (IOException ioe) {
             return ioe.getMessage();
         }
 
@@ -65,15 +63,12 @@ public class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         Log.v(LOG_TAG, BuildConfig.FLAVOR);
-        if(BuildConfig.FLAVOR.equals("paid")){
-            //TODO lauch joke activity
-            Intent displayJokeIntent = new Intent(mContext, JokeDisplayActivity.class);
-            displayJokeIntent.putExtra(INTENT_JOKE, s);
-            mContext.startActivity(displayJokeIntent);
-        }
-        else {
-            Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
-        }
+        //TODO lauch joke activity
+        Intent displayJokeIntent = new Intent(mContext, JokeDisplayActivity.class);
+        displayJokeIntent.putExtra(INTENT_JOKE, s);
+        mContext.startActivity(displayJokeIntent);
+
+
     }
 
 }

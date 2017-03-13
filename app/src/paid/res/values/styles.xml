@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MainFramentButton">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="JokeButtonDescription">
+        <item name="android:layout_above">@id/button</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginBottom">32dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+</resources>

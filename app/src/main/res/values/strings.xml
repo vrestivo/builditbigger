@@ -4,4 +4,5 @@
     <string name="button_text">Tell A Joke</string>
     <string name="action_explain">Explain the Nazi Joke</string>
     <string name="bar_explained">BAR: M1918A2 Browning Automatic Rifle</string>
+    <string name="progress_message">Loading...</string>
 </resources>

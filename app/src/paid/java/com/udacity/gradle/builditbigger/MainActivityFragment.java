@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -42,6 +43,7 @@ public class MainActivityFragment extends Fragment {
     private Button mJokeButton;
     private GetJokeAsyncTask mGetJokeAsyncTask;
     private Context mContext;
+    private ProgressDialog mProgressDialog;
 
 
     @Override
@@ -93,15 +95,25 @@ public class MainActivityFragment extends Fragment {
 
 
     public void tellJoke(){
+
+        if(mProgressDialog==null){
+            mProgressDialog = new ProgressDialog(mContext);
+            mProgressDialog.setMessage(getString(R.string.progress_message));
+        }
+
         try {
+            mProgressDialog.show();
             mGetJokeAsyncTask = new GetJokeAsyncTask();
             mGetJokeAsyncTask.execute(mContext).get(TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            mProgressDialog.dismiss();
         } catch (ExecutionException e) {
             e.printStackTrace();
+            mProgressDialog.dismiss();
         } catch (TimeoutException e) {
             e.printStackTrace();
+            mProgressDialog.dismiss();
         }
 
     }
@@ -115,6 +127,7 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected String doInBackground(Context... params) {
+            mContext = params[0];
 
             if (myJokeApiService == null) {
                 MyJokeApi.Builder builder = new MyJokeApi.Builder(  //Appengine service builder
@@ -135,7 +148,6 @@ public class MainActivityFragment extends Fragment {
                 myJokeApiService = builder.build();
             }
 
-            mContext = params[0];
 
             try {
                 return myJokeApiService.getJoke().execute().getData();
@@ -148,11 +160,13 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
+            mProgressDialog.dismiss();
             Log.v(LOG_TAG, BuildConfig.FLAVOR);
             //TODO lauch joke activity
             Intent displayJokeIntent = new Intent(mContext, JokeDisplayActivity.class);
             displayJokeIntent.putExtra(INTENT_JOKE, s);
             mContext.startActivity(displayJokeIntent);
+
         }
     }
 

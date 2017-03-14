@@ -8,7 +8,6 @@ public class JokeTeller {
     public ArrayList<String> mJokeArray = new ArrayList<>();
 
 
-    //TODO place jokes elsewhere
     public JokeTeller(){
         mJokeArray.add("Three nazis walked into a BAR");
         mJokeArray.add("Q: What's a programmer's favorite hangout spot?\nA: Foo Bar");
@@ -24,16 +23,11 @@ public class JokeTeller {
 
         if(mJokeArray!=null && !mJokeArray.isEmpty()) {
             int max = mJokeArray.size();
-
-            //TODO delete when done
-            System.out.println();
-
             int i = new Random().nextInt(max);
 
             return mJokeArray.get(i);
         }
 
-        //TODO get string out of code
         return "No jokes available";
     }
 

@@ -2,8 +2,6 @@ package com.udacity.gradle.builditbigger;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,20 +19,10 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import backend.myJokeApi.MyJokeApi;
-import jokedisplay.JokeDisplayActivity;
-
-import static apputil.GlobalConstants.INTENT_JOKE;
 
 
 /**
@@ -49,7 +37,7 @@ public class MainActivityFragment extends Fragment {
     private GetJokeAsyncTask mGetJokeAsyncTask;
 
     //ProgressDialog variables
-    public static ProgressDialog mProgressDialog;
+    public static ProgressDialog mProgressDialogSpinner;
     private String mProgressTitle;
     private String mProgressMessage;
 
@@ -96,6 +84,9 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+        //set progress dialog strings
+        mProgressMessage = getString(R.string.progress_message);
+        mProgressTitle = getString(R.string.progress_title);
 
         AdView mAdView = (AdView) root.findViewById(R.id.adView);
 
@@ -136,26 +127,20 @@ public class MainActivityFragment extends Fragment {
     public void tellJoke() {
         requestNewInterstitial();
 
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(mContext);
-            mProgressMessage = getString(R.string.progress_message);
-            mProgressTitle = getString(R.string.progress_title);
-        }
-
         try {
-            mProgressDialog.show(mContext, mProgressTitle, mProgressMessage, false);
+            mProgressDialogSpinner = new ProgressDialog(mContext, ProgressDialog.STYLE_SPINNER).show(mContext, mProgressTitle, mProgressMessage, true);
             mGetJokeAsyncTask = new GetJokeAsyncTask();
             mGetJokeAsyncTask.execute(mContext).get(TIMEOUT, TimeUnit.MILLISECONDS);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
-            mProgressDialog.dismiss();
+            mProgressDialogSpinner.dismiss();
         } catch (ExecutionException e) {
             e.printStackTrace();
-            mProgressDialog.dismiss();
+            mProgressDialogSpinner.dismiss();
         } catch (TimeoutException e) {
             e.printStackTrace();
-            mProgressDialog.dismiss();
+            mProgressDialogSpinner.dismiss();
         }
     }
 

@@ -41,12 +41,14 @@ public class MainActivityFragment extends Fragment {
     private String mJoke = null;
     private Button mJokeButton;
     private GetJokeAsyncTask mGetJokeAsyncTask;
+    private Context mContext;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        mContext =  getContext();
     }
 
     public MainActivityFragment() {
@@ -82,7 +84,7 @@ public class MainActivityFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_explain) {
-            Toast.makeText(getContext(), getString(R.string.bar_explained), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, getString(R.string.bar_explained), Toast.LENGTH_LONG).show();
         }
 
         return true;
@@ -93,7 +95,7 @@ public class MainActivityFragment extends Fragment {
     public void tellJoke(){
         try {
             mGetJokeAsyncTask = new GetJokeAsyncTask();
-            mGetJokeAsyncTask.execute(getContext()).get(TIMEOUT, TimeUnit.MILLISECONDS);
+            mGetJokeAsyncTask.execute(mContext).get(TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Build it Bigger</string>
     <string name="instructions">Press the button for a delicious joke!</string>
-    <string name="button_text">Tell Joke</string>
-    <string name="action_settings">Settings</string>
+    <string name="button_text">Tell A Joke</string>
+    <string name="action_explain">Explain the Nazi Joke</string>
+    <string name="bar_explained">BAR: M1918A2 Browning Automatic Rifle</string>
 </resources>

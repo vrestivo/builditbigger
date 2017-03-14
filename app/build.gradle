@@ -74,34 +74,28 @@ dependencies {
 
 }
 
-//using example from:
-//http://stackoverflow.com/questions/31434928/android-gradle-task-google-appengine
+//used info from https://discussions.udacity.com/t/last-optional-step-how-to-start-an-external-module-task-from-the-root-build-gradle/24211/24
+//for configuration
 
-task runGceTests (dependsOn: ":jokebackend:appengineRun") {
-    doFirst(){
-        evaluationDependsOn(":jokebackend")
+task turnOnGce(dependsOn: ":jokebackend:appengineRun") {
+    evaluationDependsOn(":jokebackend")
 
-        project(":jokebackend") {
-            appengine {
-                daemon true
-            }
-
+    project(":jokebackend") {
+        appengine {
+            daemon true
         }
-
-        ":jokebackend.appengineRun"
-        println("starting GCE dev server")
-
     }
-
-    doLast{
-        println("Testing...")
-        ":app.deviceAndroidTest"
+    doLast {
+        println("Server on...")
     }
-
-    doLast{
-        println("stopping GCE dev server")
-        ":jokebackend:appengineStop"
-    }
-
-
 }
+
+
+
+task runMyConnectedTests {
+    dependsOn  "connectedAndroidTest" //"connectedPaidDebugAndroidTest"
+    dependsOn "turnOnGce"
+    mustRunAfter "turnOnGce"
+    finalizedBy ":jokebackend:appengineStop"
+}
+

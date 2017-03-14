@@ -3,6 +3,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
+import com.udacity.gradle.builditbigger.GetJokeAsyncTask;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -32,6 +34,8 @@ public class AsyncTaskTest {
 
     @Test
     public void getJokeAsyncTaskTest(){
+
+
         GetJokeAsyncTask task = new GetJokeAsyncTask();
 
         String joke = null;

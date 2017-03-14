@@ -49,7 +49,7 @@ public class MainActivityFragment extends Fragment {
     private GetJokeAsyncTask mGetJokeAsyncTask;
 
     //ProgressDialog variables
-    private ProgressDialog mProgressDialog;
+    public static ProgressDialog mProgressDialog;
     private String mProgressTitle;
     private String mProgressMessage;
 
@@ -168,52 +168,5 @@ public class MainActivityFragment extends Fragment {
     }
 
 
-    public class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
-        //NOTE the endpoint annotation API name is capitalized by the framework
-        private MyJokeApi myJokeApiService = null;
-        private Context mContext;
-        private final String LOG_TAG = "GetJokeAsyncTask";
-
-        @Override
-        protected String doInBackground(Context... params) {
-            mContext = params[0];
-
-            if (myJokeApiService == null) {
-                MyJokeApi.Builder builder = new MyJokeApi.Builder(  //Appengine service builder
-                        AndroidHttp.newCompatibleTransport(),       //abstract HTTP transport mechanism
-                        new AndroidJsonFactory(),                   //serialization mechanism for bidirectional
-                        // conversion between JSON and JAVA objects
-
-                        null                                        //HTTP request initializer used for URL request configuration
-                ).setRootUrl("http://10.0.2.2:8080/_ah/api/")
-                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                            @Override
-                            public void initialize(AbstractGoogleClientRequest<?> request) throws IOException {
-                                request.setDisableGZipContent(true);
-                            }
-                        });
-
-                //creates an Appengine object
-                myJokeApiService = builder.build();
-            }
-
-
-            try {
-                return myJokeApiService.getJoke().execute().getData();
-            } catch (IOException ioe) {
-                return ioe.getMessage();
-            }
-        }
-
-
-        @Override
-        protected void onPostExecute(String s) {
-            mProgressDialog.dismiss();
-            Intent displayJokeIntent = new Intent(mContext, JokeDisplayActivity.class);
-            displayJokeIntent.putExtra(INTENT_JOKE, s);
-            mContext.startActivity(displayJokeIntent);
-        }
-    }
-
-
 }
+

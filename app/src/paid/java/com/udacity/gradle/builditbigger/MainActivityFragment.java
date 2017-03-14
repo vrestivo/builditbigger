@@ -43,7 +43,11 @@ public class MainActivityFragment extends Fragment {
     private Button mJokeButton;
     private GetJokeAsyncTask mGetJokeAsyncTask;
     private Context mContext;
+
+    //ProgressDialog variables
     private ProgressDialog mProgressDialog;
+    private String mProgressTitle;
+    private String mProgressMessage;
 
 
     @Override
@@ -98,11 +102,12 @@ public class MainActivityFragment extends Fragment {
 
         if(mProgressDialog==null){
             mProgressDialog = new ProgressDialog(mContext);
-            mProgressDialog.setMessage(getString(R.string.progress_message));
+            mProgressMessage = getString(R.string.progress_message);
+            mProgressTitle = getString(R.string.progress_title);
         }
 
         try {
-            mProgressDialog.show();
+            mProgressDialog.show(mContext, mProgressTitle, mProgressMessage, false);
             mGetJokeAsyncTask = new GetJokeAsyncTask();
             mGetJokeAsyncTask.execute(mContext).get(TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {

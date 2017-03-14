@@ -94,7 +94,6 @@ public class MainActivityFragment extends Fragment {
         try {
             mGetJokeAsyncTask = new GetJokeAsyncTask();
             mGetJokeAsyncTask.execute(getContext()).get(TIMEOUT, TimeUnit.MILLISECONDS);
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

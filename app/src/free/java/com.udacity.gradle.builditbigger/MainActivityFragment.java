@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -45,7 +46,12 @@ public class MainActivityFragment extends Fragment {
     private InterstitialAd mInterstitialAd;
     private Context mContext;
     private Button mJokeButton;
-    private GetJokeAsyncTask mGetJokeTask;
+    private GetJokeAsyncTask mGetJokeAsyncTask;
+
+    //ProgressDialog variables
+    private ProgressDialog mProgressDialog;
+    private String mProgressTitle;
+    private String mProgressMessage;
 
     public MainActivityFragment() {
     }
@@ -63,13 +69,6 @@ public class MainActivityFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         mJokeButton = (Button) root.findViewById(R.id.button);
 
-        mJokeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tellJoke();
-            }
-        });
-
         setHasOptionsMenu(true);
 
         //Interstitial Ad Setup
@@ -80,10 +79,22 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onAdClosed() {
                 requestNewInterstitial();
+                tellJoke();
             }
         });
 
         requestNewInterstitial();
+
+
+        mJokeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+
+            }
+        });
 
 
         AdView mAdView = (AdView) root.findViewById(R.id.adView);
@@ -125,18 +136,26 @@ public class MainActivityFragment extends Fragment {
     public void tellJoke() {
         requestNewInterstitial();
 
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(mContext);
+            mProgressMessage = getString(R.string.progress_message);
+            mProgressTitle = getString(R.string.progress_title);
+        }
+
         try {
-            if (mInterstitialAd.isLoaded()) {
-                mInterstitialAd.show();
-            } else {
-                mGetJokeTask = new GetJokeAsyncTask();
-                mGetJokeTask.execute(mContext).get(TIMEOUT, TimeUnit.MILLISECONDS);            }
+            mProgressDialog.show(mContext, mProgressTitle, mProgressMessage, false);
+            mGetJokeAsyncTask = new GetJokeAsyncTask();
+            mGetJokeAsyncTask.execute(mContext).get(TIMEOUT, TimeUnit.MILLISECONDS);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
+            mProgressDialog.dismiss();
         } catch (ExecutionException e) {
             e.printStackTrace();
+            mProgressDialog.dismiss();
         } catch (TimeoutException e) {
             e.printStackTrace();
+            mProgressDialog.dismiss();
         }
     }
 
@@ -189,6 +208,7 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
+            mProgressDialog.dismiss();
             Intent displayJokeIntent = new Intent(mContext, JokeDisplayActivity.class);
             displayJokeIntent.putExtra(INTENT_JOKE, s);
             mContext.startActivity(displayJokeIntent);

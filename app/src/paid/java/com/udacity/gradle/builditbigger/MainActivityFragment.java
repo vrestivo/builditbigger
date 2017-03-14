@@ -167,7 +167,6 @@ public class MainActivityFragment extends Fragment {
         protected void onPostExecute(String s) {
             mProgressDialog.dismiss();
             Log.v(LOG_TAG, BuildConfig.FLAVOR);
-            //TODO lauch joke activity
             Intent displayJokeIntent = new Intent(mContext, JokeDisplayActivity.class);
             displayJokeIntent.putExtra(INTENT_JOKE, s);
             mContext.startActivity(displayJokeIntent);

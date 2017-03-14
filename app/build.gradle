@@ -11,6 +11,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
     }
     buildTypes {
         release {
@@ -19,6 +21,9 @@ android {
         }
     }
 
+    dexOptions{
+        javaMaxHeapSize "2g"
+    }
 
     productFlavors {
         free {
@@ -66,25 +71,36 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-    androidTestCompile project(path:  ":jokebackend")
 
 }
 
+//using example from:
+//http://stackoverflow.com/questions/31434928/android-gradle-task-google-appengine
 
-task runGceTests {
+task runGceTests (dependsOn: ":jokebackend:appengineRun") {
     doFirst(){
+        evaluationDependsOn(":jokebackend")
+
+        project(":jokebackend") {
+            appengine {
+                daemon true
+            }
+
+        }
+
+        ":jokebackend.appengineRun"
         println("starting GCE dev server")
-        project(":jokebackend").appengineRun
+
     }
 
     doLast{
         println("Testing...")
-        project(":app").deviceAndroidTest
+        ":app.deviceAndroidTest"
     }
 
     doLast{
         println("stopping GCE dev server")
-        project(":jokebackend").appengineStop
+        ":jokebackend:appengineStop"
     }
 
 

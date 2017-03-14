@@ -63,7 +63,9 @@ public class GetJokeAsyncTask extends AsyncTask<Context, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        MainActivityFragment.mProgressDialog.dismiss();
+        if(MainActivityFragment.mProgressDialog!=null) {
+            MainActivityFragment.mProgressDialog.dismiss();
+        }
         Log.v(LOG_TAG, BuildConfig.FLAVOR);
         Intent displayJokeIntent = new Intent(mContext, JokeDisplayActivity.class);
         displayJokeIntent.putExtra(INTENT_JOKE, s);

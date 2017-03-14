@@ -72,24 +72,14 @@ public class MainActivityFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        //Interstitial Ad Setup
         MobileAds.initialize(mContext, getString(R.string.banner_ad_unit_id));
-
         mInterstitialAd = new InterstitialAd(mContext);
         mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
                 requestNewInterstitial();
-                try {
-                    mGetJokeTask = new GetJokeAsyncTask();
-                    mGetJokeTask.execute(mContext).get(TIMEOUT, TimeUnit.MILLISECONDS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
-                    e.printStackTrace();
-                }
             }
         });
 
@@ -97,10 +87,10 @@ public class MainActivityFragment extends Fragment {
 
 
         AdView mAdView = (AdView) root.findViewById(R.id.adView);
-        // Create an ad request. Check logcat output for the hashed device ID to
-        // get test ads on a physical device. e.g.
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+
         AdRequest adRequest = new AdRequest.Builder()
+                //specify emulator as a target device
+                //change for a physical device ID if testing on a piece of hardware
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mAdView.loadAd(adRequest);
@@ -165,9 +155,9 @@ public class MainActivityFragment extends Fragment {
         private Context mContext;
         private final String LOG_TAG = "GetJokeAsyncTask";
 
-
         @Override
         protected String doInBackground(Context... params) {
+            mContext = params[0];
 
             if (myJokeApiService == null) {
                 MyJokeApi.Builder builder = new MyJokeApi.Builder(  //Appengine service builder
@@ -184,11 +174,10 @@ public class MainActivityFragment extends Fragment {
                             }
                         });
 
-                //Appengine object
+                //creates an Appengine object
                 myJokeApiService = builder.build();
             }
 
-            mContext = params[0];
 
             try {
                 return myJokeApiService.getJoke().execute().getData();
@@ -200,13 +189,10 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-
             Intent displayJokeIntent = new Intent(mContext, JokeDisplayActivity.class);
             displayJokeIntent.putExtra(INTENT_JOKE, s);
             mContext.startActivity(displayJokeIntent);
         }
-
-
     }
 
 

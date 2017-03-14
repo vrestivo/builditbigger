@@ -31,7 +31,7 @@ public class MainActivityFragment extends Fragment {
     private Context mContext;
 
     //ProgressDialog variables
-    public static ProgressDialog mProgressDialog;
+    public static ProgressDialog mProgressDialogSpinner;
     private String mProgressTitle;
     private String mProgressMessage;
 
@@ -52,13 +52,17 @@ public class MainActivityFragment extends Fragment {
         setHasOptionsMenu(true);
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         mJokeButton = (Button) root.findViewById(R.id.button);
-
         mJokeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tellJoke();
             }
         });
+
+
+        //set progress dialog strings
+        mProgressMessage = getString(R.string.progress_message);
+        mProgressTitle = getString(R.string.progress_title);
 
         return root;
     }
@@ -86,25 +90,19 @@ public class MainActivityFragment extends Fragment {
 
     public void tellJoke(){
 
-        if(mProgressDialog==null){
-            mProgressDialog = new ProgressDialog(mContext);
-            mProgressMessage = getString(R.string.progress_message);
-            mProgressTitle = getString(R.string.progress_title);
-        }
-
         try {
-            mProgressDialog.show(mContext, mProgressTitle, mProgressMessage, false);
+            mProgressDialogSpinner = new ProgressDialog(mContext, ProgressDialog.STYLE_SPINNER).show(mContext, mProgressTitle, mProgressMessage, true);
             mGetJokeAsyncTask = new GetJokeAsyncTask();
             mGetJokeAsyncTask.execute(mContext).get(TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            mProgressDialog.dismiss();
+            //mProgressDialogSpinner.dismiss();
         } catch (ExecutionException e) {
             e.printStackTrace();
-            mProgressDialog.dismiss();
+            //mProgressDialogSpinner.dismiss();
         } catch (TimeoutException e) {
             e.printStackTrace();
-            mProgressDialog.dismiss();
+            //mProgressDialogSpinner.dismiss();
         }
 
     }
